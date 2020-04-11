@@ -28,6 +28,9 @@ void rgb_led_init()
 void rgb_led_set(u32_t r, u32_t g, u32_t b)
 {
   pwm_pin_set_usec(pwm_dev, RED_PIN, PERIOD, ((255 - (r & 0xff)) * PERIOD) >> 8, PWM_POLARITY_NORMAL);
+  k_sleep(K_MSEC(10));
   pwm_pin_set_usec(pwm_dev, GREEN_PIN, PERIOD, ((255 - (g & 0xff)) * PERIOD) >> 8, PWM_POLARITY_NORMAL);
+  k_sleep(K_MSEC(10));
   pwm_pin_set_usec(pwm_dev, BLUE_PIN, PERIOD, ((255 - (b & 0xff)) * PERIOD) >> 8, PWM_POLARITY_NORMAL);
+  k_sleep(K_MSEC(10));
 }

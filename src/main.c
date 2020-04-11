@@ -11,9 +11,9 @@
 #include <bluetooth/bluetooth.h>
 #include <bluetooth/hci.h>
 
-#define LOG_LEVEL 4
+#include <logging/log_ctrl.h>
 #include <logging/log.h>
-LOG_MODULE_REGISTER(ble_rgb_light);
+LOG_MODULE_REGISTER(main);
 
 #include "rgb_led.h"
 #include "gatt_led_service.h"
@@ -64,6 +64,7 @@ static void disconnected(struct bt_conn *conn, u8_t reason)
 {
   LOG_INF("Disconnected (reason %u)\n", reason);
   rgb_led_set(0x7f, 0, 0);
+  gpio_pin_set(dev, LED, 0);
   is_connected = 0;
 }
 
@@ -99,6 +100,7 @@ static void bt_ready(int err)
 
 void main(void)
 {
+  //log_init();
 
   rgb_led_init();
   rgb_led_set(0x7f, 0x00, 0x00);
@@ -120,7 +122,7 @@ void main(void)
 
   int err;
 
-  LOG_INF("Starting Beacon Demo\n");
+  LOG_INF("Starting RGB Light\n");
 
   /* Initialize the Bluetooth Subsystem */
   err = bt_enable(bt_ready);
@@ -136,16 +138,8 @@ void main(void)
     k_sleep(SLEEP_TIME);
     cnt++;
 
-    if (!is_connected)
-    {
-      rgb_led_set(0, 0, cnt % 2 ? 0x7f : 0);
-      gpio_pin_set(dev, LED, 0);
-    }
-
     gatt_service_heartbeat_notify(cnt++);
     gatt_service_data_notify();
     gatt_nus_service_data_notify(NULL);
-
-    LOG_INF("Hello - %d\n", cnt);
   }
 }

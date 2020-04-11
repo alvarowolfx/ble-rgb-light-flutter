@@ -15,6 +15,9 @@
 
 #include <data/json.h>
 
+#include <logging/log.h>
+LOG_MODULE_REGISTER(gatt_nus_service);
+
 #include "gatt_nus_service.h"
 #include "rgb_led.h"
 
@@ -78,12 +81,15 @@ static ssize_t on_write_rx(struct bt_conn *conn,
     return len;
   }
 
+  LOG_INF("Received cmd (%s)\n", log_strdup(value));
+
   struct cmd_msg sm;
   int ret;
-  ret = json_obj_parse(value, strlen(value), cmd_msg_descr, ARRAY_SIZE(cmd_msg_descr), &sm);
+  ret = json_obj_parse(value, strnlen(value, len), cmd_msg_descr, ARRAY_SIZE(cmd_msg_descr), &sm);
 
   if (ret < 0)
   {
+    LOG_ERR("Invalid cmd (%d)\n", ret);
     return len;
   }
 
@@ -91,9 +97,10 @@ static ssize_t on_write_rx(struct bt_conn *conn,
   {
     int r, g, b;
     int hex_value = (int)strtol(sm.color, NULL, 16);
-    r = (hex_value >> 16);
-    g = (hex_value >> 8);
+    r = (hex_value >> 16) & 0xFF;
+    g = (hex_value >> 8) & 0xFF;
     b = hex_value & 0xFF;
+    LOG_INF(" r g b (%d, %d, %d)", r, g, b);
     rgb_led_set(r, g, b);
 
     current_status.color = sm.color;
@@ -134,6 +141,8 @@ void gatt_nus_service_data_notify(struct bt_conn *conn)
     {
       bt_gatt_notify(conn, &nus_cvs.attrs[4], buf, strlen(buf));
       strcpy(latest_reported_data, buf);
+
+      LOG_INF("Sending new data (%s)\n", log_strdup(buf));
     }
   }
 }
