@@ -20,16 +20,11 @@ LOG_MODULE_REGISTER(gatt_nus_service);
 
 #include "gatt_nus_service.h"
 #include "rgb_led.h"
+#include "state.h"
 
 static u8_t notify_nus;
 static u8_t nus_rx[512];
 static u8_t latest_reported_data[512];
-static struct status_msg current_status = {
-    .color = "000000",
-    .r = 0,
-    .g = 0,
-    .b = 0,
-};
 
 static void nus_ccc_cfg_changed(const struct bt_gatt_attr *attr,
                                 u16_t value)

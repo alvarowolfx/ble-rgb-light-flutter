@@ -2,6 +2,7 @@
 #include <zephyr/types.h>
 #include <stddef.h>
 #include <string.h>
+#include <stdio.h>
 #include <errno.h>
 #include <sys/byteorder.h>
 #include <zephyr.h>
@@ -14,6 +15,7 @@
 
 #include "gatt_led_service.h"
 #include "rgb_led.h"
+#include "state.h"
 
 static u8_t notify_data;
 static u8_t latest_color_data[3];
@@ -58,6 +60,13 @@ static ssize_t write_cmd(struct bt_conn *conn,
   {
     rgb_led_set(values[0], values[1], values[2]);
     memcpy(latest_color_data, values, sizeof(latest_color_data));
+
+    char buf[10];
+    sprintf(buf, "%x%x%x", values[0], values[1], values[2]);
+    current_status.color = buf;
+    current_status.r = values[0];
+    current_status.g = values[1];
+    current_status.b = values[2];
   }
 
   return len;

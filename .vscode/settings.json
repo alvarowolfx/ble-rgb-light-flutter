@@ -8,6 +8,8 @@
     "json.h": "c",
     "gatt_led_service.h": "c",
     "cstdlib": "c",
-    "stdlib.h": "c"
+    "stdlib.h": "c",
+    "log.h": "c",
+    "state.h": "c"
   }
 }

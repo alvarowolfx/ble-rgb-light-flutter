@@ -28,6 +28,12 @@ LOG_MODULE_REGISTER(main);
 /* 1000 msec = 1 sec */
 #define SLEEP_TIME 1000
 
+/* size of stack area used by each thread */
+#define STACKSIZE 1024
+
+/* scheduling priority used by each thread */
+#define PRIORITY 7
+
 static const struct bt_data ad[] = {
     BT_DATA_BYTES(BT_DATA_FLAGS, BT_LE_AD_GENERAL | BT_LE_AD_NO_BREDR),
     BT_DATA_BYTES(BT_DATA_UUID128_ALL,
@@ -42,7 +48,7 @@ static void connected(struct bt_conn *conn, u8_t err)
   if (err)
   {
     LOG_INF("Connection failed (err %u)\n", err);
-    rgb_led_set(0x7f, 0, 0);
+    rgb_led_set(0, 0, 0);
     gpio_pin_set(dev, LED, 0);
     is_connected = 0;
   }
@@ -58,7 +64,7 @@ static void connected(struct bt_conn *conn, u8_t err)
 static void disconnected(struct bt_conn *conn, u8_t reason)
 {
   LOG_INF("Disconnected (reason %u)\n", reason);
-  rgb_led_set(0x7f, 0, 0);
+  rgb_led_set(0, 0, 0);
   gpio_pin_set(dev, LED, 0);
   is_connected = 0;
 }
@@ -109,8 +115,6 @@ void main(void)
     return;
   }
 
-  u32_t cnt = 0;
-
   dev = device_get_binding(LED_PORT);
   /* Set LED pin as output */
   gpio_pin_configure(dev, LED, GPIO_DIR_OUT);
@@ -127,7 +131,11 @@ void main(void)
   }
 
   bt_conn_cb_register(&conn_callbacks);
+}
 
+void notify_changes(void)
+{
+  u32_t cnt = 0;
   while (1)
   {
     k_sleep(SLEEP_TIME);
@@ -137,3 +145,6 @@ void main(void)
     gatt_nus_service_data_notify(NULL);
   }
 }
+
+K_THREAD_DEFINE(notify_changes_id, STACKSIZE, notify_changes, NULL, NULL, NULL,
+                PRIORITY, 0, 0);
