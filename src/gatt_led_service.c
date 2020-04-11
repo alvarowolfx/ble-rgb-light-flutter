@@ -60,13 +60,7 @@ static ssize_t write_cmd(struct bt_conn *conn,
   {
     rgb_led_set(values[0], values[1], values[2]);
     memcpy(latest_color_data, values, sizeof(latest_color_data));
-
-    char buf[10];
-    sprintf(buf, "%x%x%x", values[0], values[1], values[2]);
-    current_status.color = buf;
-    current_status.r = values[0];
-    current_status.g = values[1];
-    current_status.b = values[2];
+    update_color_rgb(values[0], values[1], values[2]);
   }
 
   return len;

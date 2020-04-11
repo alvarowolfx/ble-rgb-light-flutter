@@ -27,14 +27,8 @@ static const struct json_obj_descr status_msg_descr[] = {
     JSON_OBJ_DESCR_PRIM(struct status_msg, b, JSON_TOK_NUMBER),
 };
 
-static struct status_msg current_status = {
-    .color = "000000",
-    .r = 0,
-    .g = 0,
-    .b = 0,
-};
-
-void update_color_rgb(u32_t r, u32_t g, u32_t b);
-void update_color(const char *);
+void update_color_rgb(int r, int g, int b);
+void update_color(const char *color);
+struct status_msg get_current_status();
 
 #endif

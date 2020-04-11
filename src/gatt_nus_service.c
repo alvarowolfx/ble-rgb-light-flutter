@@ -90,18 +90,9 @@ static ssize_t on_write_rx(struct bt_conn *conn,
 
   if (strlen(sm.color) == 6)
   {
-    int r, g, b;
-    int hex_value = (int)strtol(sm.color, NULL, 16);
-    r = (hex_value >> 16) & 0xFF;
-    g = (hex_value >> 8) & 0xFF;
-    b = hex_value & 0xFF;
-    LOG_INF(" r g b (%d, %d, %d)", r, g, b);
-    rgb_led_set(r, g, b);
-
-    current_status.color = sm.color;
-    current_status.r = r;
-    current_status.g = g;
-    current_status.b = b;
+    update_color(sm.color);
+    struct status_msg cs = get_current_status();
+    rgb_led_set(cs.r, cs.g, cs.b);
   }
 
   return len;
@@ -128,7 +119,8 @@ void gatt_nus_service_data_notify(struct bt_conn *conn)
 
   int ret;
   char buf[512];
-  ret = json_obj_encode_buf(status_msg_descr, ARRAY_SIZE(status_msg_descr), &current_status, buf, sizeof(buf));
+  struct status_msg cs = get_current_status();
+  ret = json_obj_encode_buf(status_msg_descr, ARRAY_SIZE(status_msg_descr), &cs, buf, sizeof(buf));
 
   if (ret >= 0)
   {
