@@ -4,6 +4,10 @@
     "device.h": "c",
     "cstdio": "c",
     "conn.h": "c",
-    "gatt.h": "c"
+    "gatt.h": "c",
+    "json.h": "c",
+    "gatt_led_service.h": "c",
+    "cstdlib": "c",
+    "stdlib.h": "c"
   }
 }

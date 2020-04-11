@@ -17,6 +17,7 @@ LOG_MODULE_REGISTER(ble_rgb_light);
 
 #include "rgb_led.h"
 #include "gatt_led_service.h"
+#include "gatt_nus_service.h"
 
 #define DEVICE_NAME CONFIG_BT_DEVICE_NAME
 #define DEVICE_NAME_LEN (sizeof(DEVICE_NAME) - 1)
@@ -82,6 +83,7 @@ static void bt_ready(int err)
   LOG_INF("Bluetooth initialized\n");
 
   gatt_service_init();
+  gatt_nus_service_init();
 
   /* Start advertising */
   err = bt_le_adv_start(BT_LE_ADV_CONN_NAME, ad, ARRAY_SIZE(ad),
@@ -100,8 +102,6 @@ void main(void)
 
   rgb_led_init();
   rgb_led_set(0x7f, 0x00, 0x00);
-
-  gatt_service_init();
 
   int ret;
 
@@ -144,6 +144,7 @@ void main(void)
 
     gatt_service_heartbeat_notify(cnt++);
     gatt_service_data_notify();
+    gatt_nus_service_data_notify(NULL);
 
     LOG_INF("Hello - %d\n", cnt);
   }
