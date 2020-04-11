@@ -2,12 +2,10 @@
 #define __GATT_LED_SERVICE_H__
 
 #define BT_SERVICE_UUID BT_UUID_DECLARE_128(BT_UUID_128_ENCODE(0xb97417ae, 0x4ceb, 0x4baa, 0xab93, 0x654943bc4f5a))
-#define BT_HEARTBEAT_CHARACTERISTIC_UUID BT_UUID_DECLARE_128(BT_UUID_128_ENCODE(0x78b8e891, 0x0135, 0x475c, 0xab67, 0x814a37725cf3))
 #define BT_DATA_CHARACTERISTIC_UUID BT_UUID_DECLARE_128(BT_UUID_128_ENCODE(0x1ddd389c, 0xe639, 0x4603, 0xa145, 0xcd3867f7715b))
 #define BT_CMD_CHARACTERISTIC_UUID BT_UUID_DECLARE_128(BT_UUID_128_ENCODE(0xbd06ba71, 0x9321, 0x409c, 0x8b82, 0xcc6ed61deb73))
 
 void gatt_service_init(void);
-void gatt_service_heartbeat_notify(u32_t count);
 void gatt_service_data_notify();
 
 #endif

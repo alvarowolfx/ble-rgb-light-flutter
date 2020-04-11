@@ -28,11 +28,6 @@ LOG_MODULE_REGISTER(main);
 /* 1000 msec = 1 sec */
 #define SLEEP_TIME 1000
 
-/*
- * Set Advertisement data. Based on the Eddystone specification:
- * https://github.com/google/eddystone/blob/master/protocol-specification.md
- * https://github.com/google/eddystone/tree/master/eddystone-url
- */
 static const struct bt_data ad[] = {
     BT_DATA_BYTES(BT_DATA_FLAGS, BT_LE_AD_GENERAL | BT_LE_AD_NO_BREDR),
     BT_DATA_BYTES(BT_DATA_UUID128_ALL,
@@ -138,7 +133,6 @@ void main(void)
     k_sleep(SLEEP_TIME);
     cnt++;
 
-    gatt_service_heartbeat_notify(cnt++);
     gatt_service_data_notify();
     gatt_nus_service_data_notify(NULL);
   }
