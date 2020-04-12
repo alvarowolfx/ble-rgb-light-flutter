@@ -54,7 +54,7 @@ Spec for state:
 
 ## Flutter App
 
-App code is on the `ble_rgb_lamp`. The code right is super ugly and hacky, I'll separate it in more files to make it more understandable.
+App code is on the `ble_rgb_lamp` folder. The code right is super ugly and hacky, I'll separate it in more files to make it more understandable.
 
 #### References
 
