@@ -54,9 +54,11 @@ Spec for state:
 
 ## Flutter App
 
-Coming soon...
+App code is on the `ble_rgb_lamp`. The code right is super ugly and hacky, I'll separate it in more files to make it more understandable.
 
 #### References
 
 * A lot of the base firmware was based on this project:
   * https://github.com/larsgk/web-nrf52-dongle
+* Similar project, but with different libraries and firmware :
+  * https://medium.com/@pietrowicz.eric/bluetooth-low-energy-development-with-flutter-and-circuitpython-c7a25eafd3cf
